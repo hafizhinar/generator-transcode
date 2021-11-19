@@ -19,7 +19,7 @@ func GetCharLastSixIndex(gcn string) string {
 	return last6
 }
 
-func GeneratorBiller(gcn string, trxTypeID string) (string, error) {
+func GeneratorTrxID(gcn string, trxTypeID string) (string, error) {
 	var transactionID string
 	today := utils.ParseTimeZone(time.Now())
 	currentDate := utils.FormatDate(today)
