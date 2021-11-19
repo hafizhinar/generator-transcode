@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"regexp"
 	"time"
+
+	"github.com/hafizhinar/generator-transcode/utils"
 )
 
 var (
@@ -17,25 +19,10 @@ func GetCharLastSixIndex(gcn string) string {
 	return last6
 }
 
-func ParseTimeZone(t time.Time) time.Time {
-	loc := "Asia/Jakarta"
-	tz := time.FixedZone(loc, 7*60*60)
-
-	utc := t.UTC()
-	jstTime := utc.In(tz)
-
-	return jstTime
-}
-
-func FormatDate(t time.Time) string {
-	dateFormat := "060102050415" // YYMMDDssmmhh
-	return t.Format(dateFormat)
-}
-
-func Generator(gcn string, trxTypeID string) (string, error) {
+func GeneratorBiller(gcn string, trxTypeID string) (string, error) {
 	var transactionID string
-	today := ParseTimeZone(time.Now())
-	currentDate := FormatDate(today)
+	today := utils.ParseTimeZone(time.Now())
+	currentDate := utils.FormatDate(today)
 
 	if gcn == "" {
 		return "", errors.New("empty gcn")
@@ -56,16 +43,4 @@ func Generator(gcn string, trxTypeID string) (string, error) {
 	transactionID = fmt.Sprintf("%s%s%s", currentDate, GetCharLastSixIndex(gcn), trxTypeID)
 
 	return transactionID, nil
-}
-
-func main() {
-	gcn := "DEV40CAF6045CC50920EF35A1E697D58"
-	typeID := "02"
-	fmt.Println(GetCharLastSixIndex("DEV40CAF6045CC50920EF35A1E697D58"))
-	fmt.Println(!reAlphabet.MatchString(typeID))
-	fmt.Println(Generator(gcn, typeID))
-
-	getData, _ := Generator(gcn, typeID)
-	fmt.Println(getData)
-
 }
